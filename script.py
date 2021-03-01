@@ -135,15 +135,19 @@ class Application(tk.Frame):
             receiver = int(self.receiver_entry.get())
             receiver_time = int(self.receiver_time_entry.get())
 
-            self.processes[receiver][receiver_time].value = 1 + self.processes[emiter][emiter_time].value
+            if (self.processes[receiver][receiver_time].value < self.processes[emiter][emiter_time].value):
+                self.processes[receiver][receiver_time].value = 1 + self.processes[emiter][emiter_time].value
 
-            self.processes[emiter][emiter_time].color = "blue"
-            self.processes[receiver][receiver_time].color = "red"
+                self.processes[emiter][emiter_time].color = "blue"
+                self.processes[receiver][receiver_time].color = "red"
 
-            razao = self.processes[receiver][1].value
-            for i in range(receiver_time+1,len(self.processes[receiver])):
-                self.processes[receiver][i].value = self.processes[receiver][i-1].value + razao
-                self.processes[receiver][i].color = "red"
+                razao = self.processes[receiver][1].value
+                for i in range(receiver_time+1,len(self.processes[receiver])):
+                    self.processes[receiver][i].value = self.processes[receiver][i-1].value + razao
+                    self.processes[receiver][i].color = "red"
+            else:
+                for i in range(receiver_time+1,len(self.processes[receiver])):
+                    self.processes[receiver][i].color = "red"
 
             self.create_processes_grid()
             self.create_lines(emiter, emiter_time, receiver, receiver_time)
